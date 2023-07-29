@@ -1,8 +1,9 @@
+import { Event } from 'socket.io';
 import './style.css'
 
-const board = document.querySelector('#root')
-const sound = document.getElementById("sound");
-const playerTag = document.querySelector("#playerTag")
+const board:HTMLDivElement = document.querySelector('#root')
+const sound:HTMLAudioElement = document.getElementById("sound") as HTMLAudioElement;
+const playerTag:HTMLSpanElement = document.querySelector("#playerTag")
 
 let pieces = [
     ["br", "bn", "bb", "bq", "bk", "bb", "bn", "br",],
@@ -72,9 +73,9 @@ function arrangeBoard() {
     let a = 0
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
-            const square = document.querySelector(`#s${[i] + [j]}`)
+            const square: HTMLDivElement = document.querySelector(`#s${([i]).toString() + ([j]).toString()}`)
             if (pieces[i][j] !== "") {
-                square.innerHTML = `<img id='p${[i] + [j]}' src='/images/${(pieces[i][j]).toString()}.svg'/>`
+                square.innerHTML = `<img id='p${([i]).toString() + ([j]).toString()}' src='/images/${(pieces[i][j]).toString()}.svg'/>`
                 // if ([i] + [j] > 59) {
                 //     piece = new Piece("white", ([i] + [j]))
                 // }
@@ -83,10 +84,10 @@ function arrangeBoard() {
                 // }
             }
 
-            square.firstChild?.classList.add([i] + [j] > 59 ? "white" : "black")
+            square.firstChild?.classList.add(Number((i).toString() + (j).toString()) > 59 ? "white" : "black")
             //console.log(piece)
             square.firstChild?.setAttribute('draggable', true)
-            square.setAttribute("rank", a)
+            square.setAttribute("rank", (a).toString())
             a++
         }
     }
@@ -98,7 +99,7 @@ function changeIdwithRank() {
     let a = 0
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
-            const square = document.querySelector(`#s${[i] + [j]}`)
+            const square = document.querySelector(`#s${([i]).toString() + ([j]).toString()}`)
             square.setAttribute("id", a)
             //square.append(`${a}`)
             a++
@@ -138,7 +139,7 @@ squares.forEach(square => {
 })
 
 squares.forEach(square => {
-    square.addEventListener('drop', (e) => {
+    square.addEventListener('drop', (e:any) => {
         sound.play()
         e.target.appendChild(draggedPiece)
         changePlayer()
@@ -148,7 +149,7 @@ squares.forEach(square => {
 })
 
 images.forEach(square => {
-    square.addEventListener('drop', (e) => {
+    square.addEventListener('drop', (e:any) => {
         e.stopPropagation()
         // if (e.target.classList.firstChild == draggedPiece.classList.firstChild) {
         //     console.log(e.target, draggedPiece)
@@ -195,7 +196,7 @@ function getMovesRecursively(square) {
 function getPawnMoves(pawn) {
     // +16 or +8
     let currentPieceLocation = pawn.parentNode.getAttribute("rank")
-    let possibleLocation = Number(currentPieceLocation) - 8
+    let possibleLocation = (Number(currentPieceLocation) - 8).toString()
     console.log(possibleLocation)
     document.getElementById(possibleLocation).style.backgroundColor = "red"
 
@@ -206,7 +207,7 @@ function getRookMoves(rook) {
 
     let currentPieceLocation = rook.parentNode.getAttribute("rank")
     let possibleLocation = [
-        getRookMoves(document.querySelector(Number(currentPieceLocation) - 8)),
+        //getRookMoves(document.querySelector((Number(currentPieceLocation) - 8)).toString()),
         Number(currentPieceLocation) - 1,
         Number(currentPieceLocation) + 8,
         Number(currentPieceLocation) + 1,
@@ -214,7 +215,7 @@ function getRookMoves(rook) {
     ]
     console.log(possibleLocation)
     for (let i = 0; i < possibleLocation.length; i++) {
-        document.getElementById(possibleLocation[i]).style.backgroundColor = "red"
+        document.getElementById((possibleLocation[i]).toString()).style.backgroundColor = "red"
     }
 
 }
@@ -231,7 +232,7 @@ function getBishopMoves(bishop) {
     ]
     console.log(possibleLocation)
     for (let i = 0; i < possibleLocation.length; i++) {
-        document.getElementById(possibleLocation[i]).style.backgroundColor = "red"
+        document.getElementById((possibleLocation[i]).toString()).style.backgroundColor = "red"
     }
 
 }
